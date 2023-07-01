@@ -23,4 +23,9 @@ public class TodoController {
     public void addTodo(@RequestBody TodoDto todoDto) {
 
     }
+
+    @PostMapping("/delete/{todoID}")
+    public void deleteTodo(@PathVariable Long todoID) {
+
+    }
 }

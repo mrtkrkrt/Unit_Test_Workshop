@@ -1,9 +1,19 @@
 package com.folksdev.workshop.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.folksdev.workshop.dto.UserDto;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/user")
 public class UserController {
+
+    @GetMapping("/{userId}")
+    public void retrieveAllTodosByUserId(@PathVariable Long userId) {
+
+    }
+
+    @PostMapping("/add")
+    public void addUser(@RequestBody UserDto userDto) {
+
+    }
 }

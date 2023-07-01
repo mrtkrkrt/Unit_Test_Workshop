@@ -11,6 +11,7 @@ public class TodoConverter {
         Todo todo = new Todo();
         todo.setComplete(todoDto.isComplete());
         todo.setDescription(todoDto.getDescription());
-
+        todo.setUser(todoDto.getUser());
+        return todo;
     }
 }
