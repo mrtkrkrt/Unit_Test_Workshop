@@ -16,4 +16,9 @@ public class UserController {
     public void addUser(@RequestBody UserDto userDto) {
 
     }
+
+    @PostMapping("/update/{userId}")
+    public void updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
+
+    }
 }
