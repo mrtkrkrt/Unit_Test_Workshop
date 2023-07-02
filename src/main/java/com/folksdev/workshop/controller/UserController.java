@@ -2,7 +2,9 @@ package com.folksdev.workshop.controller;
 
 import com.folksdev.workshop.converter.UserConverter;
 import com.folksdev.workshop.dto.UserDto;
+import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
+import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -10,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
@@ -17,9 +20,11 @@ import java.util.List;
 public class UserController {
 
     private UserRepository userRepository;
+    private TodoRepository todoRepository;
 
-    public UserController(UserRepository userRepository) {
+    public UserController(UserRepository userRepository, TodoRepository todoRepository) {
         this.userRepository = userRepository;
+        this.todoRepository = todoRepository;
     }
 
     @GetMapping("/users")
@@ -28,8 +33,10 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    public void retrieveAllTodosByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<Todo>> retrieveAllTodosByUserId(@PathVariable Long userId) {
         // user exist kontrolü
+        List<Todo> todos = todoRepository.findAll().stream().filter(e -> e.getUser().getId().equals(userId)).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.FOUND).body(todos);
     }
 
     @PostMapping("/add")

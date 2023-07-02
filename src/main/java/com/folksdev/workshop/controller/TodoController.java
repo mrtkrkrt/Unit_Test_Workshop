@@ -40,10 +40,11 @@ public class TodoController {
 
     @PostMapping("/save")
     public ResponseEntity<Todo> addTodo(@RequestBody TodoDto todoDto) {
-        Optional<User> user = userRepository.findById(todoDto.getUser().getId());
+        Optional<User> user = userRepository.findById(todoDto.getUserId());
         if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
+        todoRepository.save(TodoConverter.toData(todoDto));
         return ResponseEntity.status(HttpStatus.FOUND).body(TodoConverter.toData(todoDto));
     }
 

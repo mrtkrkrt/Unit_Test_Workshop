@@ -1,5 +1,6 @@
 package com.folksdev.workshop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class User {
     @Column(name = "username", unique = true)
     private String username;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Todo> todos = new ArrayList<>();
 }
