@@ -2,6 +2,7 @@ package com.folksdev.workshop.controller;
 
 import com.folksdev.workshop.converter.TodoConverter;
 import com.folksdev.workshop.dto.TodoDto;
+import com.folksdev.workshop.exception.TodoNotFoundException;
 import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.repository.TodoRepository;
@@ -34,7 +35,10 @@ public class TodoController {
 
     @GetMapping("/{todoId}")
     public ResponseEntity<Todo> getTodoByID(@PathVariable Long todoID) {
-        // Todo boş mu kontrolü ekle
+        Todo todo = todoRepository.findById(todoID).orElse(null);
+        if (todo == null) {
+            throw new TodoNotFoundException();
+        }
         return ResponseEntity.status(HttpStatus.FOUND).body(todoRepository.findById(todoID).orElse(null));
     }
 
@@ -50,9 +54,23 @@ public class TodoController {
 
     @PostMapping("/delete/{todoID}")
     public ResponseEntity<Todo> deleteTodo(@PathVariable Long todoID) {
-        // Todo boş mu kontrolü ekle
+        Todo todo = todoRepository.findById(todoID).orElse(null);
+        if (todo == null) {
+            throw new TodoNotFoundException();
+        }
         Optional<Todo> deletedTodo = todoRepository.findById(todoID);
         todoRepository.deleteById(todoID);
         return ResponseEntity.status(HttpStatus.FOUND).body(deletedTodo.orElse(null));
+    }
+
+    @PostMapping("/done/{id}")
+    public ResponseEntity<Todo> doneTodo(@PathVariable Long todoID) {
+        Todo todo = todoRepository.findById(todoID).orElse(null);
+        if (todo == null) {
+            throw new TodoNotFoundException();
+        }
+        if (todo.isComplete()) todo.setComplete(false);
+        else todo.setComplete(true);
+        return ResponseEntity.status(HttpStatus.OK).body(todo);
     }
 }

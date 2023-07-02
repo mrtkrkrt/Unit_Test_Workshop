@@ -1,4 +1,4 @@
 package com.folksdev.workshop.exception;
 
-public class TodoNotFoundException {
+public class TodoNotFoundException extends RuntimeException {
 }
