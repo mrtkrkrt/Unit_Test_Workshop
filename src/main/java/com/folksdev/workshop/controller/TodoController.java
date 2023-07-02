@@ -73,4 +73,9 @@ public class TodoController {
         else todo.setComplete(true);
         return ResponseEntity.status(HttpStatus.OK).body(todo);
     }
+
+    @PostMapping("/update/{todoID}")
+    public ResponseEntity<Todo> updateTodo(@PathVariable Long id) {
+        return null;
+    }
 }

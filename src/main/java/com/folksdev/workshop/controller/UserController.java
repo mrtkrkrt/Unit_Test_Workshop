@@ -34,14 +34,20 @@ public class UserController {
 
     @GetMapping("/{userId}")
     public ResponseEntity<List<Todo>> retrieveAllTodosByUserId(@PathVariable Long userId) {
-        // user exist kontrolü
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new RuntimeException();
+        }
         List<Todo> todos = todoRepository.findAll().stream().filter(e -> e.getUser().getId().equals(userId)).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.FOUND).body(todos);
     }
 
     @PostMapping("/add")
     public ResponseEntity<User> addUser(@RequestBody UserDto userDto) {
-        // username exist kontrolü
+        User checkUserExists = userRepository.findById(userDto.getId()).orElse(null);
+        if (checkUserExists == null) {
+            throw new RuntimeException();
+        }
         log.info("USER ADD");
         User user = UserConverter.toData(userDto);
         userRepository.save(user);
@@ -52,6 +58,9 @@ public class UserController {
 
     @PostMapping("/update/{userId}")
     public void updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
-        // user exist kontrolü
+        User checkUserExists = userRepository.findById(userDto.getId()).orElse(null);
+        if (checkUserExists == null) {
+            throw new RuntimeException();
+        }
     }
 }
