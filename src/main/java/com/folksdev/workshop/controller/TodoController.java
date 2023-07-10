@@ -18,6 +18,7 @@ import java.util.Optional;
 @RequestMapping("/api/todo")
 public class TodoController {
 
+    // validasyon ekle, todo türü mutfak felan,
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
 
