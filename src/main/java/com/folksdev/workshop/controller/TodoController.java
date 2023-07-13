@@ -7,8 +7,10 @@ import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,7 +46,8 @@ public class TodoController {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<Todo> addTodo(@RequestBody TodoDto todoDto) {
+    public ResponseEntity<Todo> addTodo(@Valid @RequestBody TodoDto todoDto, BindingResult bindingResult) {
+        // binding result kullanarak vcalidation yap
         Optional<User> user = userRepository.findById(todoDto.getUserId());
         if (user.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
