@@ -4,4 +4,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class TodoService {
+    // private olarak bir iki fonksiyon ekle
 }

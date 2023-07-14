@@ -20,7 +20,13 @@ import java.util.Optional;
 @RequestMapping("/api/todo")
 public class TodoController {
 
-    // validasyon ekle, todo türü mutfak felan,
+    // TODO: 7/13/2023 log ekle  
+    // TODO: 7/13/2023 controller ın içini servise taşı
+    // TODO: 7/13/2023 validation testleri 
+    // TODO: 7/13/2023 repository testleri custom query 1 tane yeterli örnek için
+    // getTodoById_givenExistingId_returnTodo
+    // getTodoById_givenNoneExistingId_throwError
+
     private final TodoRepository todoRepository;
     private final UserRepository userRepository;
 
@@ -59,7 +65,7 @@ public class TodoController {
     @PostMapping("/delete/{todoID}")
     public ResponseEntity<Todo> deleteTodo(@PathVariable Long todoID) {
         Todo todo = todoRepository.findById(todoID).orElse(null);
-        if (todo == null) {
+        if (todo == null) { // private taşı
             throw new TodoNotFoundException();
         }
         Optional<Todo> deletedTodo = todoRepository.findById(todoID);
@@ -67,7 +73,7 @@ public class TodoController {
         return ResponseEntity.status(HttpStatus.FOUND).body(deletedTodo.orElse(null));
     }
 
-    @PostMapping("/done/{id}")
+    @PatchMapping("/done/{id}")
     public ResponseEntity<Todo> doneTodo(@PathVariable Long todoID) {
         Todo todo = todoRepository.findById(todoID).orElse(null);
         if (todo == null) {
