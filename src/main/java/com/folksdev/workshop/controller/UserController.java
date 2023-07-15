@@ -31,6 +31,11 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(userService.findAll());
     }
 
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<User> getUserById(@PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.findUserById(userId));
+    }
+
     @GetMapping("/todos/{userId}")
     public ResponseEntity<List<Todo>> retrieveTodosByUserId(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.FOUND).body(userService.getTodosByUserId(userId));
@@ -47,10 +52,14 @@ public class UserController {
     }
 
     @PostMapping("/update/{userId}")
-    public void updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
-        userService.updateUser(userDto, userId);
+    public ResponseEntity<User> updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(userDto, userId));
     }
 
-    // delete user
+    @PostMapping("/delete/{userId}")
+    public ResponseEntity<User> deleteUser(@PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(userId));
+    }
+
     // get user by id
 }

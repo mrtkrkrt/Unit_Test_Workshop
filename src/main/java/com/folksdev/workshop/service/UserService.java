@@ -48,16 +48,34 @@ public class UserService {
         return user;
     }
 
-    public void updateUser(UserDto userDto, Long userId) {
+    public User updateUser(UserDto userDto, Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new UserNotFoundException();
         }
         user.setUsername(userDto.getUsername());
         userRepository.save(user);
+        return user;
     }
 
     public User getUserById(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        return user;
+    }
+
+    public User deleteUser(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        userRepository.deleteById(userId);
+        return user;
+    }
+
+    public User findUserById(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new UserNotFoundException();
