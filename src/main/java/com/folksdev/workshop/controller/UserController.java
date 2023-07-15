@@ -1,14 +1,9 @@
 package com.folksdev.workshop.controller;
 
-import com.folksdev.workshop.converter.UserConverter;
 import com.folksdev.workshop.dto.UserDto;
 import com.folksdev.workshop.exception.InvalidTodoRequest;
-import com.folksdev.workshop.exception.UserAlreadyExistException;
-import com.folksdev.workshop.exception.UserNotFoundException;
 import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
-import com.folksdev.workshop.repository.TodoRepository;
-import com.folksdev.workshop.repository.UserRepository;
 import com.folksdev.workshop.service.UserService;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -18,8 +13,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/user")
