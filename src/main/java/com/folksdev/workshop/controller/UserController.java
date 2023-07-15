@@ -60,6 +60,4 @@ public class UserController {
     public ResponseEntity<User> deleteUser(@PathVariable Long userId) {
         return ResponseEntity.status(HttpStatus.OK).body(userService.deleteUser(userId));
     }
-
-    // get user by id
 }
