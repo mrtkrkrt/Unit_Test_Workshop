@@ -1,14 +1,8 @@
 package com.folksdev.workshop.controller;
 
-import com.folksdev.workshop.converter.TodoConverter;
 import com.folksdev.workshop.dto.TodoDto;
-import com.folksdev.workshop.dto.UserDto;
 import com.folksdev.workshop.exception.InvalidTodoRequest;
-import com.folksdev.workshop.exception.TodoNotFoundException;
 import com.folksdev.workshop.model.Todo;
-import com.folksdev.workshop.model.User;
-import com.folksdev.workshop.repository.TodoRepository;
-import com.folksdev.workshop.repository.UserRepository;
 import com.folksdev.workshop.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,7 +11,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/todo")

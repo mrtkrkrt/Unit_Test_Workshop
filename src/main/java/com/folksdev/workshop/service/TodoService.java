@@ -11,7 +11,6 @@ import com.folksdev.workshop.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,10 +25,7 @@ public class TodoService {
     }
 
     public Todo findTodoById(Long id) {
-        Todo todo = todoRepository.findById(id).orElse(null);
-        if (todo == null) {
-            throw new TodoNotFoundException();
-        }
+        Todo todo = isTodoExist(id);
         return todo;
     }
 
@@ -38,29 +34,20 @@ public class TodoService {
     }
 
     public Todo addTodo(TodoDto todoDto) {
-        User user = userRepository.findById(todoDto.getUserId()).orElse(null);
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
+        User user = isUserExists(todoDto.getUserId());
         Todo todo = TodoConverter.toData(todoDto);
         todoRepository.save(todo);
         return todo;
     }
 
     public Todo deleteTodo(Long todoID) {
-        Todo todo = todoRepository.findById(todoID).orElse(null);
-        if (todo == null) { // private taşı
-            throw new TodoNotFoundException();
-        }
+        Todo todo = isTodoExist(todoID);
         todoRepository.delete(todo);
         return todo;
     }
 
     public Todo switchTodoStatus(Long todoID) {
-        Todo todo = todoRepository.findById(todoID).orElse(null);
-        if (todo == null) {
-            throw new TodoNotFoundException();
-        }
+        Todo todo = isTodoExist(todoID);
         if (todo.isComplete()) todo.setComplete(false);
         else todo.setComplete(true);
         todoRepository.save(todo);
@@ -68,10 +55,7 @@ public class TodoService {
     }
 
     public Todo updateTodo(TodoDto todoDto, Long todoId) {
-        Todo todo = todoRepository.findById(todoId).orElse(null);
-        if (todo == null) {
-            throw new TodoNotFoundException();
-        }
+        Todo todo = isTodoExist(todoId);
         todo.setDescription(todoDto.getDescription());
         todo.setComplete(todoDto.isComplete());
         todo.setCreatedDate(todoDto.getCreatedDate());
@@ -81,5 +65,21 @@ public class TodoService {
 
     private List<Todo> getTodosByUserId(Long userId) {
         return todoRepository.findAll().stream().filter(e -> e.getUser().getId().equals(userId)).collect(Collectors.toList());
+    }
+
+    private Todo isTodoExist(Long todoId) {
+        Todo todo = todoRepository.findById(todoId).orElse(null);
+        if (todo == null) {
+            throw new TodoNotFoundException();
+        }
+        return todo;
+    }
+
+    private User isUserExists(Long userId) {
+        User user = userRepository.findById(userId).orElse(null);
+        if (user == null) {
+            throw new UserNotFoundException();
+        }
+        return user;
     }
 }

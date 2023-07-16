@@ -11,7 +11,6 @@ import com.folksdev.workshop.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,10 +29,7 @@ public class UserService {
     }
 
     public List<Todo> getTodosByUserId(Long userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isEmpty()) {
-            throw new UserNotFoundException();
-        }
+        User user = isUserExists(userId);
         List<Todo> todos = todoRepository.findAll().stream().filter(e -> e.getUser().getId().equals(userId)).collect(Collectors.toList());
         return todos;
     }
@@ -49,33 +45,29 @@ public class UserService {
     }
 
     public User updateUser(UserDto userDto, Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
+        User user = isUserExists(userId);
         user.setUsername(userDto.getUsername());
         userRepository.save(user);
         return user;
     }
 
     public User getUserById(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
+        User user = isUserExists(userId);
         return user;
     }
 
     public User deleteUser(Long userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
-            throw new UserNotFoundException();
-        }
+        User user = isUserExists(userId);
         userRepository.deleteById(userId);
         return user;
     }
 
     public User findUserById(Long userId) {
+        User user = isUserExists(userId);
+        return user;
+    }
+
+    private User isUserExists(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
             throw new UserNotFoundException();
