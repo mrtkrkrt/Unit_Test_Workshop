@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 public class UserConverter {
 
     public static User toData(UserDto userDto) {
-        // TODO username validasyonu
         User user = new User();
         user.setUsername(userDto.getUsername());
         return user;

@@ -5,6 +5,7 @@ import com.folksdev.workshop.exception.InvalidTodoRequest;
 import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.service.TodoService;
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -14,14 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/todo")
+@Slf4j
 public class TodoController {
 
     // TODO: 7/13/2023 log ekle
-    // TODO: 7/13/2023 validation testleri 
-    // TODO: 7/13/2023 repository testleri custom query 1 tane yeterli örnek için
-    // getTodoById_givenExistingId_returnTodo
-    // getTodoById_givenNoneExistingId_throwError
-
+    // TODO: 7/13/2023 validation testleri
 
     private TodoService todoService;
 

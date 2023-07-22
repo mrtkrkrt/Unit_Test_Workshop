@@ -8,12 +8,14 @@ import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class TodoService {
 
     private TodoRepository todoRepository;
@@ -70,7 +72,7 @@ public class TodoService {
     private Todo isTodoExist(Long todoId) {
         Todo todo = todoRepository.findById(todoId).orElse(null);
         if (todo == null) {
-            throw new TodoNotFoundException();
+            throw new TodoNotFoundException("There is no todo with the given id => " + todoId);
         }
         return todo;
     }
@@ -78,7 +80,7 @@ public class TodoService {
     private User isUserExists(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("There is no user with the given id => " + userId);
         }
         return user;
     }

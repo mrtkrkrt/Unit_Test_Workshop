@@ -29,6 +29,9 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 	implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '8.0.0.CR3'
 	implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.0.2'
+
+	testImplementation 'org.junit.jupiter:junit-jupiter:5.7.1'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {

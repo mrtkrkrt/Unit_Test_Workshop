@@ -8,12 +8,14 @@ import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class UserService {
 
     private UserRepository userRepository;
@@ -37,7 +39,7 @@ public class UserService {
     public User saveUser(UserDto userDto) {
         List<User> users = userRepository.findAll();
         if (users.stream().anyMatch(u -> u.getUsername().equals(userDto.getUsername()))) {
-            throw new UserAlreadyExistException();
+            throw new UserAlreadyExistException("User Already Exists!");
         }
         User user = UserConverter.toData(userDto);
         userRepository.save(user);
@@ -70,7 +72,7 @@ public class UserService {
     private User isUserExists(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException("There is no user with the given id => " + userId);
         }
         return user;
     }
