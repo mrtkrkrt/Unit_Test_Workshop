@@ -12,26 +12,6 @@ class UserDtoTest {
     void setUp() {
     }
 
-    @AfterEach
-    void tearDown() {
-    }
-
-    @Test
-    void getId() {
-    }
-
-    @Test
-    void getUsername() {
-    }
-
-    @Test
-    void setId() {
-    }
-
-    @Test
-    void setUsername() {
-    }
-
     @Test
     void testEquals() {
     }

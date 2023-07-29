@@ -9,6 +9,7 @@ import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,13 +19,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TodoService {
 
+    @Autowired
     private TodoRepository todoRepository;
+    @Autowired
     private UserRepository userRepository;
-
-    public TodoService(TodoRepository todoRepository, UserRepository userRepository) {
-        this.todoRepository = todoRepository;
-        this.userRepository = userRepository;
-    }
 
     public Todo findTodoById(Long id) {
         Todo todo = isTodoExist(id);
@@ -37,7 +35,7 @@ public class TodoService {
 
     public Todo addTodo(TodoDto todoDto) {
         User user = isUserExists(todoDto.getUserId());
-        Todo todo = TodoConverter.toData(todoDto);
+        Todo todo = TodoConverter.toData(todoDto, userRepository);
         todoRepository.save(todo);
         return todo;
     }

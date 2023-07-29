@@ -19,7 +19,6 @@ import java.util.List;
 public class TodoController {
 
     // TODO: 7/13/2023 log ekle
-    // TODO: 7/13/2023 validation testleri
 
     private TodoService todoService;
 

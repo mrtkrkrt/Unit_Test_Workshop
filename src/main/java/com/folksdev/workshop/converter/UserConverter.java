@@ -9,6 +9,7 @@ public class UserConverter {
 
     public static User toData(UserDto userDto) {
         User user = new User();
+        user.setId(userDto.getId());
         user.setUsername(userDto.getUsername());
         return user;
     }
