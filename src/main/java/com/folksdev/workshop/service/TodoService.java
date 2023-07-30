@@ -63,7 +63,7 @@ public class TodoService {
         return todo;
     }
 
-    private List<Todo> getTodosByUserId(Long userId) {
+    public List<Todo> getTodosByUserId(Long userId) {
         return todoRepository.findAll().stream().filter(e -> e.getUser().getId().equals(userId)).collect(Collectors.toList());
     }
 
