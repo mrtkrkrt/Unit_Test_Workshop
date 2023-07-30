@@ -16,7 +16,6 @@ import java.util.Date;
 @Table(name = "todos", schema = "workshop")
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Todo {
 
     @Id
@@ -30,6 +29,7 @@ public class Todo {
     private User user;
 
     @Column(nullable = false)
+    @Size(min = 2, max = 200)
     private String description;
 
     @Column(nullable = false)
