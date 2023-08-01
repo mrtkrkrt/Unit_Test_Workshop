@@ -8,7 +8,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +16,11 @@ import org.springframework.validation.BindingResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+//@ExtendWith(MockitoExtension.class) -> case olarak anlat
 class TodoControllerTest {
 
     @Mock
@@ -28,30 +29,33 @@ class TodoControllerTest {
     @InjectMocks
     private TodoController todoController;
 
+    @Mock
     private BindingResult bindingResult;
 
     @BeforeEach
-    public void setUp() {
-        MockitoAnnotations.initMocks(this);
-        bindingResult = Mockito.mock(BindingResult.class);
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testRetrieveAllTodos() {
+    void testRetrieveAllTodos() {
+        // given -> build operate check pattern clean code kitabı
         List<Todo> todos = new ArrayList<>();
         todos.add(new Todo(1L, null, "Todo 1", false, null));
         todos.add(new Todo(2L, null, "Todo 2", true, null));
 
         when(todoService.findAll()).thenReturn(todos);
 
+        // when
         ResponseEntity<List<Todo>> responseEntity = todoController.retrieveAllTodos();
 
+        // then
         assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
         assertEquals(todos, responseEntity.getBody());
     }
 
     @Test
-    public void testGetTodoByID() {
+    void testGetTodoByID() {
         Long todoID = 1L;
         Todo todo = new Todo(todoID, null, "Test Todo", false, null);
 
@@ -64,7 +68,7 @@ class TodoControllerTest {
     }
 
     @Test
-    public void testAddTodo_ValidInput() {
+    void testAddTodo_ValidInput() {
         TodoDto todoDto = new TodoDto();
         todoDto.setDescription("New Todo");
         todoDto.setComplete(false);
@@ -80,21 +84,17 @@ class TodoControllerTest {
     }
 
     @Test
-    public void testAddTodo_InvalidInput() {
+    void testAddTodo_givenInvalidInput_thenThrowError() {
         TodoDto todoDto = new TodoDto();
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        try {
-            todoController.addTodo(todoDto, bindingResult);
-        } catch (InvalidTodoRequest e) {
-            // Expected behavior, do nothing
-        }
+        assertThrows(InvalidTodoRequest.class, () -> todoController.addTodo(todoDto, bindingResult));
 
         verify(todoService, never()).addTodo(any(TodoDto.class));
     }
 
     @Test
-    public void testDeleteTodo() {
+    void testDeleteTodo() {
         Long todoID = 1L;
         Todo deletedTodo = new Todo(todoID, null, "Test Todo", false, null);
 
@@ -109,7 +109,7 @@ class TodoControllerTest {
     }
 
     @Test
-    public void testSwitchTodoStatus() {
+    void testSwitchTodoStatus() {
         Long todoID = 1L;
         Todo updatedTodo = new Todo(todoID, null, "Test Todo", true, null);
 
@@ -124,7 +124,7 @@ class TodoControllerTest {
     }
 
     @Test
-    public void testUpdateTodo() {
+    void testUpdateTodo() {
         Long todoID = 1L;
         TodoDto todoDto = new TodoDto();
         todoDto.setDescription("Updated Todo");

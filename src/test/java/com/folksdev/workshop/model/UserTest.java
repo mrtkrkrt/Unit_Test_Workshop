@@ -1,13 +1,13 @@
 package com.folksdev.workshop.model;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class UserTest {
 
@@ -15,7 +15,7 @@ class UserTest {
     private List<Todo> todos;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         user = new User();
         user.setId(1L);
         user.setUsername("testUser");
@@ -26,7 +26,7 @@ class UserTest {
     }
 
     @Test
-    public void testGetters() {
+    void testGetters() {
         Long actualId = user.getId();
         String actualUsername = user.getUsername();
         List<Todo> actualTodos = user.getTodos();
@@ -38,7 +38,7 @@ class UserTest {
     }
 
     @Test
-    public void testSetters() {
+    void testSetters() {
         Long newId = 2L;
         String newUsername = "newUser";
         List<Todo> newTodos = new ArrayList<>();
@@ -55,7 +55,7 @@ class UserTest {
     }
 
     @Test
-    public void testEmptyConstructor() {
+    void testEmptyConstructor() {
         User emptyUser = new User();
         assertNull(emptyUser.getId());
         assertNull(emptyUser.getUsername());
@@ -63,7 +63,7 @@ class UserTest {
     }
 
     @Test
-    public void testAllArgsConstructor() {
+    void testAllArgsConstructor() {
         Long id = 3L;
         String username = "testUser2";
 

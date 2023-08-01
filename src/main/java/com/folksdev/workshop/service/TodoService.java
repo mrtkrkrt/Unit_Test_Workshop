@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -48,8 +49,12 @@ public class TodoService {
 
     public Todo switchTodoStatus(Long todoID) {
         Todo todo = isTodoExist(todoID);
-        if (todo.isComplete()) todo.setComplete(false);
-        else todo.setComplete(true);
+        if (todo.isComplete()) {
+            todo.setComplete(false);
+        }
+        else {
+            todo.setComplete(true);
+        }
         todoRepository.save(todo);
         return todo;
     }
@@ -69,16 +74,16 @@ public class TodoService {
 
     private Todo isTodoExist(Long todoId) {
         Todo todo = todoRepository.findById(todoId).orElse(null);
-        if (todo == null) {
-            throw new TodoNotFoundException("There is no todo with the given id => " + todoId);
+        if (Objects.isNull(todo)) {
+            throw new TodoNotFoundException(String.format("There is no todo with the given id => {}", todoId));
         }
         return todo;
     }
 
     private User isUserExists(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
-            throw new UserNotFoundException("There is no user with the given id => " + userId);
+        if (Objects.isNull(user)) {
+            throw new UserNotFoundException(String.format("There is no user with the given id => {}", userId));
         }
         return user;
     }

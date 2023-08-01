@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,8 +72,8 @@ public class UserService {
 
     private User isUserExists(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
-        if (user == null) {
-            throw new UserNotFoundException("There is no user with the given id => " + userId);
+        if (Objects.isNull(user)) {
+            throw new UserNotFoundException(String.format("There is no user with the given id => {}", userId));
         }
         return user;
     }

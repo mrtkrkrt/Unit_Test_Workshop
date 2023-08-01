@@ -6,20 +6,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class InvalidUserRequestTest {
     @Test
-    public void testEmptyConstructor() {
+    void testEmptyConstructor() {
         InvalidUserRequest exception = new InvalidUserRequest();
         assertEquals(null, exception.getMessage());
     }
 
     @Test
-    public void testMessageConstructor() {
+    void testMessageConstructor() {
         String errorMessage = "Invalid User Request";
         InvalidUserRequest exception = new InvalidUserRequest(errorMessage);
         assertEquals(errorMessage, exception.getMessage());
     }
 
     @Test
-    public void testCustomErrorMessage() {
+    void testCustomErrorMessage() {
         String errorMessage = "This is a custom error message for the user.";
         InvalidUserRequest exception = new InvalidUserRequest(errorMessage);
         assertEquals(errorMessage, exception.getMessage());

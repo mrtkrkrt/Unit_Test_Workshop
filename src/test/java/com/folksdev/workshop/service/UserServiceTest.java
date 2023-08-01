@@ -7,12 +7,10 @@ import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -34,12 +32,12 @@ class UserServiceTest {
     private UserService userService;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testFindAll() {
+    void testFindAll() {
         List<User> users = new ArrayList<>();
 
         users.add(new User(1L, "user1", new ArrayList<>()));
@@ -53,14 +51,14 @@ class UserServiceTest {
     }
 
     @Test
-    public void testGetTodosByUserId() {
+    void testGetTodosByUserId() {
         User user1 = new User(1L, "user1", new ArrayList<>());
-        User user2 =  new User(2L, "user2", new ArrayList<>());
+        User user2 = new User(2L, "user2", new ArrayList<>());
 
         List<Todo> todos = new ArrayList<>();
         todos.add(new Todo(1L, user1, "Todo 1", false, new Date()));
         todos.add(new Todo(2L, user1, "Todo 2", false, new Date()));
-        todos.add(new Todo(3L, user2, "Todo 3",  true, new Date()));
+        todos.add(new Todo(3L, user2, "Todo 3", true, new Date()));
 
         when(todoRepository.findAll()).thenReturn(todos);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user1));
@@ -71,7 +69,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testSaveUser() {
+    void testSaveUser() {
         UserDto userDto = new UserDto();
         userDto.setUsername("newUser");
 
@@ -84,7 +82,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testSaveUser_UserAlreadyExists() {
+    void testSaveUser_UserAlreadyExists() {
         UserDto userDto = new UserDto();
         userDto.setUsername("existingUser");
         List<User> existingUsers = new ArrayList<>();
@@ -96,7 +94,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testUpdateUser() {
+    void testUpdateUser() {
         UserDto userDto = new UserDto();
         userDto.setUsername("updatedUser");
         User existingUser = new User(1L, "existingUser", new ArrayList<>());
@@ -111,7 +109,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testUpdateUser_UserNotFound() {
+    void testUpdateUser_UserNotFound() {
         UserDto userDto = new UserDto();
         userDto.setUsername("updatedUser");
 
@@ -121,7 +119,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testDeleteUser() {
+    void testDeleteUser() {
         User existingUser = new User();
         existingUser.setId(1L);
         existingUser.setUsername("existingUser");
@@ -138,7 +136,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testDeleteUser_UserNotFound() {
+    void testDeleteUser_UserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         assertThrows(UserNotFoundException.class, () -> userService.deleteUser(1L));
@@ -147,7 +145,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testGetUserById() {
+    void testGetUserById() {
         User existingUser = new User();
         existingUser.setId(1L);
         existingUser.setUsername("existingUser");
@@ -162,13 +160,13 @@ class UserServiceTest {
     }
 
     @Test
-    public void testGetUserById_UserNotFound() {
+    void testGetUserById_UserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.getUserById(1L));
     }
 
     @Test
-    public void testFindUserById() {
+    void testFindUserById() {
         User existingUser = new User();
         existingUser.setId(1L);
         existingUser.setUsername("existingUser");
@@ -183,13 +181,13 @@ class UserServiceTest {
     }
 
     @Test
-    public void testFindUserById_UserNotFound() {
+    void testFindUserById_UserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> userService.findUserById(1L));
     }
 
     @Test
-    public void testIsUserExists() {
+    void testIsUserExists() {
         User existingUser = new User();
         existingUser.setId(1L);
         existingUser.setUsername("existingUser");
@@ -204,7 +202,7 @@ class UserServiceTest {
     }
 
     @Test
-    public void testIsUserExists_UserNotFound() {
+    void testIsUserExists_UserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
         assertThrows(UserNotFoundException.class, () -> ReflectionTestUtils.invokeMethod(userService, "isUserExists", 1L));
     }

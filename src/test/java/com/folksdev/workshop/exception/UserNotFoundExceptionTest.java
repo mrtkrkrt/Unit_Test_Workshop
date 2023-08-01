@@ -6,20 +6,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class UserNotFoundExceptionTest {
     @Test
-    public void testEmptyConstructor() {
+    void testEmptyConstructor() {
         UserNotFoundException exception = new UserNotFoundException();
         assertEquals(null, exception.getMessage());
     }
 
     @Test
-    public void testMessageConstructor() {
+    void testMessageConstructor() {
         String errorMessage = "User Not Found";
         UserNotFoundException exception = new UserNotFoundException(errorMessage);
         assertEquals(errorMessage, exception.getMessage());
     }
 
     @Test
-    public void testCustomErrorMessage() {
+    void testCustomErrorMessage() {
         String errorMessage = "Custom error message for User Not Found";
         UserNotFoundException exception = new UserNotFoundException(errorMessage);
         assertEquals(errorMessage, exception.getMessage());

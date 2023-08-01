@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/todo")
+@RequestMapping("/api/v1/todo")
 @Slf4j
 public class TodoController {
 
     // TODO: 7/13/2023 log ekle
-    // TODO: 7/30/2023 response request değiştirilebilir
+    // TODO: 1.08.2023 test isimlerini tek tip yap 
+    // TODO: 1.08.2023 display name ekle biraz
+    // TODO: 1.08.2023 save metodlarını ekstra metod içine al (try catch)
+    // TODO: 1.08.2023 mockedstatic ekle
 
     private TodoService todoService;
 

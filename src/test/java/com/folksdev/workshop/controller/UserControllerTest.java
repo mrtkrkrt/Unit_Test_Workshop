@@ -33,13 +33,13 @@ class UserControllerTest {
     private BindingResult bindingResult;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.initMocks(this);
         bindingResult = Mockito.mock(BindingResult.class);
     }
 
     @Test
-    public void testRetrieveAllUsers() {
+    void testRetrieveAllUsers() {
         List<User> users = new ArrayList<>();
         users.add(new User(1L, "user1", null));
         users.add(new User(2L, "user2", null));
@@ -53,7 +53,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void testGetUserById() {
+    void testGetUserById() {
         Long userId = 1L;
         User user = new User(userId, "testUser", null);
 
@@ -66,7 +66,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void testRetrieveTodosByUserId() {
+    void testRetrieveTodosByUserId() {
         Long userId = 1L;
         List<Todo> todos = new ArrayList<>();
         todos.add(new Todo(1L, null, "Todo 1", false, null));
@@ -81,7 +81,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void testAddUser_ValidInput() {
+    void testAddUser_ValidInput() {
         UserDto userDto = new UserDto();
         userDto.setUsername("newUser");
 
@@ -96,7 +96,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void testAddUser_InvalidInput() {
+    void testAddUser_InvalidInput() {
         UserDto userDto = new UserDto();
 
         when(bindingResult.hasErrors()).thenReturn(true);
@@ -111,7 +111,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void testUpdateUser() {
+    void testUpdateUser() {
         Long userId = 1L;
         UserDto userDto = new UserDto();
         userDto.setUsername("updatedUser");
@@ -128,7 +128,7 @@ class UserControllerTest {
     }
 
     @Test
-    public void testDeleteUser() {
+    void testDeleteUser() {
         Long userId = 1L;
         User deletedUser = new User(userId, "deletedUser", null);
 

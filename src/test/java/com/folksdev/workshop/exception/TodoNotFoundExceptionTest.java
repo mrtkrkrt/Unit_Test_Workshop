@@ -6,20 +6,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TodoNotFoundExceptionTest {
     @Test
-    public void testEmptyConstructor() {
+    void testEmptyConstructor() {
         TodoNotFoundException exception = new TodoNotFoundException();
         assertEquals(null, exception.getMessage());
     }
 
     @Test
-    public void testMessageConstructor() {
+    void testMessageConstructor() {
         String errorMessage = "Todo Not Found";
         TodoNotFoundException exception = new TodoNotFoundException(errorMessage);
         assertEquals(errorMessage, exception.getMessage());
     }
 
     @Test
-    public void testCustomErrorMessage() {
+    void testCustomErrorMessage() {
         String errorMessage = "Custom error message for Todo Not Found";
         TodoNotFoundException exception = new TodoNotFoundException(errorMessage);
         assertEquals(errorMessage, exception.getMessage());
