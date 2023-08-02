@@ -1,5 +1,6 @@
 package com.folksdev.workshop.service;
 
+import com.folksdev.workshop.converter.UserConverter;
 import com.folksdev.workshop.dto.UserDto;
 import com.folksdev.workshop.exception.UserAlreadyExistException;
 import com.folksdev.workshop.exception.UserNotFoundException;
@@ -9,9 +10,7 @@ import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.*;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.ArrayList;
@@ -70,15 +69,21 @@ class UserServiceTest {
 
     @Test
     void testSaveUser() {
+        MockedStatic<UserConverter> userConverterMockedStatic = Mockito.mockStatic(UserConverter.class);
+
         UserDto userDto = new UserDto();
         userDto.setUsername("newUser");
+        User user = new User(1L, "newUser", new ArrayList<>());
 
+        userConverterMockedStatic.when(() -> UserConverter.toData(Mockito.any())).thenReturn(user);
         when(userRepository.findAll()).thenReturn(new ArrayList<>());
 
         User result = userService.saveUser(userDto);
 
         assertNotNull(result);
         assertEquals(userDto.getUsername(), result.getUsername());
+
+        userConverterMockedStatic.close();
     }
 
     @Test
