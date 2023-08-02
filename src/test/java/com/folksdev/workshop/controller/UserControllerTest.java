@@ -1,7 +1,7 @@
 package com.folksdev.workshop.controller;
 
 import com.folksdev.workshop.dto.UserDto;
-import com.folksdev.workshop.exception.InvalidTodoRequest;
+import com.folksdev.workshop.exception.InvalidUserRequest;
 import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.service.UserService;
@@ -18,7 +18,7 @@ import org.springframework.validation.BindingResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class UserControllerTest {
@@ -98,15 +98,13 @@ class UserControllerTest {
     @Test
     void testAddUser_InvalidInput() {
         UserDto userDto = new UserDto();
+        userDto.setId(1L);
 
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        try {
-            userController.addUser(userDto, bindingResult);
-        } catch (InvalidTodoRequest e) {
-            // Expected behavior, do nothing
-        }
+        InvalidUserRequest invalidUserRequest = assertThrows(InvalidUserRequest.class, () -> userController.addUser(userDto, bindingResult));
 
+        assertTrue(invalidUserRequest.getMessage().contains(String.valueOf(userDto.getId())));
         verify(userService, never()).saveUser(any(UserDto.class));
     }
 

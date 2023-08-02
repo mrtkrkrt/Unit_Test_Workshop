@@ -16,8 +16,7 @@ import org.springframework.validation.BindingResult;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 //@ExtendWith(MockitoExtension.class) -> case olarak anlat
@@ -56,19 +55,23 @@ class TodoControllerTest {
 
     @Test
     void testGetTodoByID() {
+        // given
         Long todoID = 1L;
         Todo todo = new Todo(todoID, null, "Test Todo", false, null);
 
         when(todoService.findTodoById(todoID)).thenReturn(todo);
 
+        // when
         ResponseEntity<Todo> responseEntity = todoController.getTodoByID(todoID);
 
+        // then
         assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
         assertEquals(todo, responseEntity.getBody());
     }
 
     @Test
     void testAddTodo_ValidInput() {
+        // given
         TodoDto todoDto = new TodoDto();
         todoDto.setDescription("New Todo");
         todoDto.setComplete(false);
@@ -77,31 +80,42 @@ class TodoControllerTest {
         when(todoService.addTodo(todoDto)).thenReturn(savedTodo);
         when(bindingResult.hasErrors()).thenReturn(false);
 
+        // when
         ResponseEntity<Todo> responseEntity = todoController.addTodo(todoDto, bindingResult);
 
+        // then
         assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
         assertEquals(savedTodo, responseEntity.getBody());
     }
 
     @Test
     void testAddTodo_givenInvalidInput_thenThrowError() {
+        // given
         TodoDto todoDto = new TodoDto();
+        todoDto.setId(1L);
         when(bindingResult.hasErrors()).thenReturn(true);
 
-        assertThrows(InvalidTodoRequest.class, () -> todoController.addTodo(todoDto, bindingResult));
+        // when
+        InvalidTodoRequest invalidTodoRequest = assertThrows(InvalidTodoRequest.class, () -> todoController.addTodo(todoDto, bindingResult));
 
+        // then
+        System.out.println(invalidTodoRequest.getMessage());
+        assertTrue(invalidTodoRequest.getMessage().contains(String.valueOf(todoDto.getId())));
         verify(todoService, never()).addTodo(any(TodoDto.class));
     }
 
     @Test
     void testDeleteTodo() {
+        // given
         Long todoID = 1L;
         Todo deletedTodo = new Todo(todoID, null, "Test Todo", false, null);
 
         when(todoService.deleteTodo(todoID)).thenReturn(deletedTodo);
 
+        // when
         ResponseEntity<Todo> responseEntity = todoController.deleteTodo(todoID);
 
+        // then
         assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
         assertEquals(deletedTodo, responseEntity.getBody());
 
@@ -110,13 +124,16 @@ class TodoControllerTest {
 
     @Test
     void testSwitchTodoStatus() {
+        // given
         Long todoID = 1L;
         Todo updatedTodo = new Todo(todoID, null, "Test Todo", true, null);
 
         when(todoService.switchTodoStatus(todoID)).thenReturn(updatedTodo);
 
+        // when
         ResponseEntity<Todo> responseEntity = todoController.switchTodoStatus(todoID);
 
+        // then
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(updatedTodo, responseEntity.getBody());
 
@@ -125,6 +142,7 @@ class TodoControllerTest {
 
     @Test
     void testUpdateTodo() {
+        // given
         Long todoID = 1L;
         TodoDto todoDto = new TodoDto();
         todoDto.setDescription("Updated Todo");
@@ -133,8 +151,10 @@ class TodoControllerTest {
         Todo updatedTodo = new Todo(todoID, null, todoDto.getDescription(), todoDto.isComplete(), null);
         when(todoService.updateTodo(todoDto, todoID)).thenReturn(updatedTodo);
 
+        // when
         ResponseEntity<Todo> responseEntity = todoController.updateTodo(todoDto, todoID);
 
+        // then
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(updatedTodo, responseEntity.getBody());
 

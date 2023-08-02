@@ -62,8 +62,10 @@ class TodoServiceTest {
         todoDto.setDescription("Todo 1");
         todoDto.setUserId(1L);
         User existingUser = new User(1L, "user1", new ArrayList<>());
+        Todo todo = new Todo(1L, existingUser, "Todo 1", false, new Date());
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(existingUser));
+        todoConverterMockedStatic.when(() -> TodoConverter.toData(Mockito.any(TodoDto.class), Mockito.any())).thenReturn(todo);
 
         Todo result = todoService.addTodo(todoDto);
 
@@ -81,6 +83,7 @@ class TodoServiceTest {
         TodoDto todoDto = new TodoDto();
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
+
         assertThrows(UserNotFoundException.class, () -> todoService.addTodo(todoDto));
         verify(todoRepository, never()).save(any(Todo.class));
     }
@@ -109,7 +112,7 @@ class TodoServiceTest {
     }
 
     @Test
-    void testSwitchTodoStatus() {
+    void testSwitchTodoStatus_TodoIsNotCompleted() {
         User user = new User(1L, "user1", new ArrayList<>());
         Todo existingTodo = new Todo(1L, user, "Task 1", false, new Date());
 
@@ -120,6 +123,22 @@ class TodoServiceTest {
         assertNotNull(result);
         assertEquals(1L, result.getId());
         assertTrue(result.isComplete());
+
+        verify(todoRepository, times(1)).save(result);
+    }
+
+    @Test
+    void testSwitchTodoStatus_TodoIsCompleted() {
+        User user = new User(1L, "user1", new ArrayList<>());
+        Todo existingTodo = new Todo(1L, user, "Task 1", true, new Date());
+
+        when(todoRepository.findById(anyLong())).thenReturn(Optional.of(existingTodo));
+
+        Todo result = todoService.switchTodoStatus(1L);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertFalse(result.isComplete());
 
         verify(todoRepository, times(1)).save(result);
     }
@@ -213,7 +232,10 @@ class TodoServiceTest {
     @Test
     void testIsTodoExist_TodoNotFound() {
         when(todoRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(TodoNotFoundException.class, () -> ReflectionTestUtils.invokeMethod(todoService, "isTodoExist", 1L));
+
+        TodoNotFoundException todoNotFoundException = assertThrows(TodoNotFoundException.class, () -> ReflectionTestUtils.invokeMethod(todoService, "isTodoExist", 1L));
+
+        assertTrue(todoNotFoundException.getMessage().contains(String.valueOf(1L)));
     }
 
     @Test
@@ -234,6 +256,9 @@ class TodoServiceTest {
     @Test
     void testIsUserExists_UserNotFound() {
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
-        assertThrows(UserNotFoundException.class, () -> ReflectionTestUtils.invokeMethod(todoService, "isUserExists", 1L));
+
+        UserNotFoundException userNotFoundException = assertThrows(UserNotFoundException.class, () -> ReflectionTestUtils.invokeMethod(todoService, "isUserExists", 1L));
+
+        assertTrue(userNotFoundException.getMessage().contains(String.valueOf(1L)));
     }
 }

@@ -1,7 +1,7 @@
 package com.folksdev.workshop.controller;
 
 import com.folksdev.workshop.dto.UserDto;
-import com.folksdev.workshop.exception.InvalidTodoRequest;
+import com.folksdev.workshop.exception.InvalidUserRequest;
 import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.service.UserService;
@@ -44,7 +44,7 @@ public class UserController {
     @PostMapping("/add")
     public ResponseEntity<User> addUser(@Valid @RequestBody UserDto userDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new InvalidTodoRequest();
+            throw new InvalidUserRequest("Invalid user request -> " + userDto.getId());
         }
         return ResponseEntity
                 .status(HttpStatus.CREATED)

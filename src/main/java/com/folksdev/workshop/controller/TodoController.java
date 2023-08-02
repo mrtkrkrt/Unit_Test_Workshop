@@ -19,11 +19,8 @@ import java.util.List;
 public class TodoController {
 
     // TODO: 7/13/2023 log ekle
-    // TODO: 1.08.2023 test isimlerini tek tip yap 
-    // TODO: 1.08.2023 display name ekle biraz
     // TODO: 1.08.2023 save metodlarını ekstra metod içine al (try catch)
-    // TODO: 1.08.2023 mockedstatic ekle
-
+    // TODO: 2.08.2023 parametrized test ve csv source
     private TodoService todoService;
 
     public TodoController(TodoService todoService) {
@@ -46,7 +43,7 @@ public class TodoController {
     @PostMapping("/save")
     public ResponseEntity<Todo> addTodo(@Valid @RequestBody TodoDto todoDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            throw new InvalidTodoRequest();
+            throw new InvalidTodoRequest("Invalid todo request -> " + todoDto.getId());
         }
         return ResponseEntity.status(HttpStatus.FOUND).body(todoService.addTodo(todoDto));
     }

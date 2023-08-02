@@ -75,7 +75,7 @@ public class TodoService {
     private Todo isTodoExist(Long todoId) {
         Todo todo = todoRepository.findById(todoId).orElse(null);
         if (Objects.isNull(todo)) {
-            throw new TodoNotFoundException(String.format("There is no todo with the given id => {}", todoId));
+            throw new TodoNotFoundException(String.format("There is no todo with the given id => %s", todoId));
         }
         return todo;
     }
@@ -83,7 +83,7 @@ public class TodoService {
     private User isUserExists(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (Objects.isNull(user)) {
-            throw new UserNotFoundException(String.format("There is no user with the given id => {}", userId));
+            throw new UserNotFoundException(String.format("There is no user with the given id => %s", userId));
         }
         return user;
     }

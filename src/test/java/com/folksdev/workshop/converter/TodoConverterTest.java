@@ -10,13 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,6 +57,7 @@ class TodoConverterTest {
     @Test
     void toData_invalidUser() {
         Mockito.doReturn(Optional.empty()).when(userRepository).findById(Mockito.anyLong());
+
         UserNotFoundException userNotFoundException = Assertions.assertThrows(UserNotFoundException.class, () -> {
             TodoConverter.toData(todoDto, userRepository);
         });
