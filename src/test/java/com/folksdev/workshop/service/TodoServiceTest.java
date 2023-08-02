@@ -10,6 +10,8 @@ import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.*;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -109,6 +111,23 @@ class TodoServiceTest {
 
         assertThrows(TodoNotFoundException.class, () -> todoService.deleteTodo(1L));
         verify(todoRepository, never()).delete(any(Todo.class));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void testSwitchTodoStatus(boolean status) {
+        User user = new User(1L, "user1", new ArrayList<>());
+        Todo existingTodo = new Todo(1L, user, "Task 1", status, new Date());
+
+        when(todoRepository.findById(anyLong())).thenReturn(Optional.of(existingTodo));
+
+        Todo result = todoService.switchTodoStatus(1L);
+
+        assertNotNull(result);
+        assertEquals(1L, result.getId());
+        assertNotEquals(status, result.isComplete());
+
+        verify(todoRepository, times(1)).save(result);
     }
 
     @Test

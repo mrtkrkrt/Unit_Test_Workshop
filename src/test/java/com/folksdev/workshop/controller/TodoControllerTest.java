@@ -6,6 +6,8 @@ import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.service.TodoService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -53,16 +55,16 @@ class TodoControllerTest {
         assertEquals(todos, responseEntity.getBody());
     }
 
-    @Test
-    void testGetTodoByID() {
+    @ParameterizedTest
+    @ValueSource(longs = {1, 2, 3})
+    void testGetTodoByID(Long todoId) {
         // given
-        Long todoID = 1L;
-        Todo todo = new Todo(todoID, null, "Test Todo", false, null);
+        Todo todo = new Todo(todoId, null, "Test Todo", false, null);
 
-        when(todoService.findTodoById(todoID)).thenReturn(todo);
+        when(todoService.findTodoById(anyLong())).thenReturn(todo);
 
         // when
-        ResponseEntity<Todo> responseEntity = todoController.getTodoByID(todoID);
+        ResponseEntity<Todo> responseEntity = todoController.getTodoByID(todoId);
 
         // then
         assertEquals(HttpStatus.FOUND, responseEntity.getStatusCode());
@@ -123,21 +125,21 @@ class TodoControllerTest {
     }
 
     @Test
-    void testSwitchTodoStatus() {
+    void testSwitchTodoStatus(boolean status) {
         // given
-        Long todoID = 1L;
-        Todo updatedTodo = new Todo(todoID, null, "Test Todo", true, null);
+        Todo updatedTodo = new Todo(1L, null, "Test Todo", status, null);
 
-        when(todoService.switchTodoStatus(todoID)).thenReturn(updatedTodo);
+        when(todoService.switchTodoStatus(anyLong())).thenReturn(updatedTodo);
 
         // when
-        ResponseEntity<Todo> responseEntity = todoController.switchTodoStatus(todoID);
+        ResponseEntity<Todo> responseEntity = todoController.switchTodoStatus(1L);
 
         // then
+
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(updatedTodo, responseEntity.getBody());
 
-        verify(todoService, times(1)).switchTodoStatus(todoID);
+        verify(todoService, times(1)).switchTodoStatus(anyLong());
     }
 
     @Test
