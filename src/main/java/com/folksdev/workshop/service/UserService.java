@@ -47,9 +47,9 @@ public class UserService {
         return user;
     }
 
-    public User updateUser(UserDto userDto, Long userId) {
+    public User updateUser(String username, Long userId) {
         User user = isUserExists(userId);
-        user.setUsername(userDto.getUsername());
+        user.setUsername(username);
         userRepository.save(user);
         return user;
     }

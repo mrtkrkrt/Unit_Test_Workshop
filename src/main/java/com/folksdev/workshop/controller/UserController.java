@@ -52,8 +52,8 @@ public class UserController {
     }
 
     @PostMapping("/update/{userId}")
-    public ResponseEntity<User> updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
-        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(userDto, userId));
+    public ResponseEntity<User> updateUser(@RequestBody String username, @PathVariable Long userId) {
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(username, userId));
     }
 
     @PostMapping("/delete/{userId}")

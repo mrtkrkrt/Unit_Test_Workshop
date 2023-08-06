@@ -10,6 +10,8 @@ import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.*;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -98,29 +100,30 @@ class UserServiceTest {
         assertThrows(UserAlreadyExistException.class, () -> userService.saveUser(userDto));
     }
 
-    @Test
-    void testUpdateUser() {
-        UserDto userDto = new UserDto();
-        userDto.setUsername("updatedUser");
-        User existingUser = new User(1L, "existingUser", new ArrayList<>());
+    @ParameterizedTest
+    @CsvSource({
+            "'updateUsername1', 1",
+            "'updateUsername2', 2"
+    })
+    void testUpdateUser(String username, Long userId) {
+        User existingUser = new User(userId, "existingUser", new ArrayList<>());
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(existingUser));
 
-        User result = userService.updateUser(userDto, 1L);
+        User result = userService.updateUser(username, userId);
 
         assertNotNull(result);
-        assertEquals(1L, result.getId());
-        assertEquals(userDto.getUsername(), result.getUsername());
+        assertEquals(userId, result.getId());
+        assertEquals(username, result.getUsername());
     }
 
     @Test
     void testUpdateUser_UserNotFound() {
-        UserDto userDto = new UserDto();
-        userDto.setUsername("updatedUser");
+        String username = "updatedUsername";
 
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        assertThrows(UserNotFoundException.class, () -> userService.updateUser(userDto, 1L));
+        assertThrows(UserNotFoundException.class, () -> userService.updateUser(username, 1L));
     }
 
     @Test

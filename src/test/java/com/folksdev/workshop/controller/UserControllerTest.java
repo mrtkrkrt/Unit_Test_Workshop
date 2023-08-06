@@ -34,7 +34,7 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        MockitoAnnotations.initMocks(this);
+        MockitoAnnotations.openMocks(this);
         bindingResult = Mockito.mock(BindingResult.class);
     }
 
@@ -111,18 +111,17 @@ class UserControllerTest {
     @Test
     void testUpdateUser() {
         Long userId = 1L;
-        UserDto userDto = new UserDto();
-        userDto.setUsername("updatedUser");
+        String newUsername = "updateUsername";
 
-        User updatedUser = new User(userId, userDto.getUsername(), null);
-        when(userService.updateUser(userDto, userId)).thenReturn(updatedUser);
+        User updatedUser = new User(userId, "username", null);
+        when(userService.updateUser(any(), anyLong())).thenReturn(updatedUser);
 
-        ResponseEntity<User> responseEntity = userController.updateUser(userDto, userId);
+        ResponseEntity<User> responseEntity = userController.updateUser(newUsername, userId);
 
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(updatedUser, responseEntity.getBody());
 
-        verify(userService, times(1)).updateUser(userDto, userId);
+        verify(userService, times(1)).updateUser(any(), anyLong());
     }
 
     @Test

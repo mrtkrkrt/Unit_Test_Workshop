@@ -125,9 +125,9 @@ class TodoControllerTest {
     }
 
     @Test
-    void testSwitchTodoStatus(boolean status) {
+    void testSwitchTodoStatus() {
         // given
-        Todo updatedTodo = new Todo(1L, null, "Test Todo", status, null);
+        Todo updatedTodo = new Todo(1L, null, "Test Todo", true, null);
 
         when(todoService.switchTodoStatus(anyLong())).thenReturn(updatedTodo);
 
