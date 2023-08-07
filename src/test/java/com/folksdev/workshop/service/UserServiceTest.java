@@ -8,6 +8,7 @@ import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
+import nl.altindag.log.LogCaptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -31,6 +32,8 @@ class UserServiceTest {
     private TodoRepository todoRepository;
     @InjectMocks
     private UserService userService;
+
+    private final LogCaptor logCaptor = LogCaptor.forClass(UserService.class);
 
     @BeforeEach
     void setUp() {
@@ -98,6 +101,7 @@ class UserServiceTest {
         when(userRepository.findAll()).thenReturn(existingUsers);
 
         assertThrows(UserAlreadyExistException.class, () -> userService.saveUser(userDto));
+        assertTrue(logCaptor.getErrorLogs().get(0).contains("existingUser"));
     }
 
     @ParameterizedTest
@@ -115,6 +119,7 @@ class UserServiceTest {
         assertNotNull(result);
         assertEquals(userId, result.getId());
         assertEquals(username, result.getUsername());
+        assertTrue(logCaptor.getInfoLogs().get(0).contains(username));
     }
 
     @Test
@@ -139,6 +144,7 @@ class UserServiceTest {
         assertNotNull(result);
         assertEquals(1L, result.getId());
         assertEquals(existingUser.getUsername(), result.getUsername());
+        assertTrue(logCaptor.getInfoLogs().get(0).contains("existingUser"));
 
         verify(userRepository, times(1)).deleteById(anyLong());
     }

@@ -8,6 +8,7 @@ import com.folksdev.workshop.model.Todo;
 import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
+import nl.altindag.log.LogCaptor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -32,6 +33,8 @@ class TodoServiceTest {
     private UserRepository userRepository;
     @InjectMocks
     private TodoService todoService;
+
+    private final LogCaptor logCaptor = LogCaptor.forClass(TodoService.class);
 
     @BeforeEach
     void setUp() {
@@ -75,6 +78,9 @@ class TodoServiceTest {
         assertEquals(todoDto.getDescription(), result.getDescription());
         assertEquals(existingUser, result.getUser());
 
+        assertEquals(1, logCaptor.getInfoLogs().size());
+        assertTrue(logCaptor.getInfoLogs().get(0).contains("Todo 1"));
+
         verify(todoRepository, times(1)).save(result);
 
         todoConverterMockedStatic.close();
@@ -102,6 +108,9 @@ class TodoServiceTest {
         assertNotNull(result);
         assertEquals(1L, result.getId());
 
+        assertEquals(1, logCaptor.getInfoLogs().size());
+        assertTrue(logCaptor.getInfoLogs().get(0).contains(String.valueOf(1L)));
+
         verify(todoRepository, times(1)).delete(existingTodo);
     }
 
@@ -126,6 +135,8 @@ class TodoServiceTest {
         assertNotNull(result);
         assertEquals(1L, result.getId());
         assertNotEquals(status, result.isComplete());
+
+        assertTrue(logCaptor.getInfoLogs().get(0).contains(String.valueOf(1L)));
 
         verify(todoRepository, times(1)).save(result);
     }
@@ -187,6 +198,8 @@ class TodoServiceTest {
         assertEquals(1L, result.getId());
         assertEquals(todoDto.getDescription(), result.getDescription());
         assertEquals(todoDto.isComplete(), result.isComplete());
+
+        assertTrue(logCaptor.getInfoLogs().get(0).contains(String.valueOf(1L)));
 
         verify(todoRepository, times(1)).save(result);
     }

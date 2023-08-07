@@ -9,7 +9,6 @@ import com.folksdev.workshop.model.User;
 import com.folksdev.workshop.repository.TodoRepository;
 import com.folksdev.workshop.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,10 +19,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class TodoService {
 
-    @Autowired
-    private TodoRepository todoRepository;
-    @Autowired
-    private UserRepository userRepository;
+    private final TodoRepository todoRepository;
+    private final UserRepository userRepository;
+
+    public TodoService(TodoRepository todoRepository, UserRepository userRepository) {
+        this.todoRepository = todoRepository;
+        this.userRepository = userRepository;
+    }
 
     public Todo findTodoById(Long id) {
         Todo todo = isTodoExist(id);
@@ -37,6 +39,7 @@ public class TodoService {
     public Todo addTodo(TodoDto todoDto) {
         User user = isUserExists(todoDto.getUserId());
         Todo todo = TodoConverter.toData(todoDto, userRepository);
+        log.info("Todo added successfully: {}", todoDto.getDescription());
         todoRepository.save(todo);
         return todo;
     }
@@ -44,6 +47,7 @@ public class TodoService {
     public Todo deleteTodo(Long todoID) {
         Todo todo = isTodoExist(todoID);
         todoRepository.delete(todo);
+        log.info("Todo deleted successfully: {}", todoID);
         return todo;
     }
 
@@ -55,6 +59,7 @@ public class TodoService {
         else {
             todo.setComplete(true);
         }
+        log.info("Todo status switched successfully: {}", todoID);
         todoRepository.save(todo);
         return todo;
     }
@@ -65,6 +70,7 @@ public class TodoService {
         todo.setComplete(todoDto.isComplete());
         todo.setCreatedDate(todoDto.getCreatedDate());
         todoRepository.save(todo);
+        log.info("Todo updated successfully: {}", todoId);
         return todo;
     }
 

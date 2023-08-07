@@ -19,8 +19,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class UserService {
 
-    private UserRepository userRepository;
-    private TodoRepository todoRepository;
+    private final UserRepository userRepository;
+    private final TodoRepository todoRepository;
 
     public UserService(UserRepository userRepository, TodoRepository todoRepository) {
         this.userRepository = userRepository;
@@ -40,6 +40,7 @@ public class UserService {
     public User saveUser(UserDto userDto) {
         List<User> users = userRepository.findAll();
         if (users.stream().anyMatch(u -> u.getUsername().equals(userDto.getUsername()))) {
+            log.error("User already exists with username: {}", userDto.getUsername());
             throw new UserAlreadyExistException("User Already Exists!");
         }
         User user = UserConverter.toData(userDto);
@@ -51,6 +52,7 @@ public class UserService {
         User user = isUserExists(userId);
         user.setUsername(username);
         userRepository.save(user);
+        log.info("User updated successfully: {} (ID: {})", username, userId);
         return user;
     }
 
@@ -62,6 +64,7 @@ public class UserService {
     public User deleteUser(Long userId) {
         User user = isUserExists(userId);
         userRepository.deleteById(userId);
+        log.info("User deleted successfully: {} (ID: {})", user.getUsername(), userId);
         return user;
     }
 
@@ -73,6 +76,7 @@ public class UserService {
     private User isUserExists(Long userId) {
         User user = userRepository.findById(userId).orElse(null);
         if (Objects.isNull(user)) {
+            log.error("User not found with ID: {}", userId);
             throw new UserNotFoundException(String.format("There is no user with the given id => {}", userId));
         }
         return user;
